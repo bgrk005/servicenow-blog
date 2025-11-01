@@ -1,17 +1,17 @@
 ---
-title: "ServiceNow: Safely Querying GlideRecord (with Examples)"
-description: "How to use GlideRecord safely and efficiently in ServiceNow scripts."
+title: "ServiceNow - Safely Querying GlideRecord (with Examples)"
+description: "Learn how to safely query data using the GlideRecord API in ServiceNow."
 pubDate: "2025-11-01"
 category: "ServiceNow"
 tags:
-  - "GlideRecord"
-  - "Query"
-  - "Best Practices"
+  - GlideRecord
+  - Query
+  - Best Practices
 draft: false
 ---
 
-When working with ServiceNow’s GlideRecord API, you can query data safely by
-specifying conditions before execution:
+When working with ServiceNow’s GlideRecord API, it’s important to structure queries
+so they are safe, performant, and readable.
 
 ```js
 var gr = new GlideRecord("incident");
