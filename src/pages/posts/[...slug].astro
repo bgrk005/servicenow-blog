@@ -1,55 +1,25 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro';
+import Layout from "../../layouts/Layout.astro";
+import { getCollection } from "astro:content";
 
-const allPosts = await Astro.glob('../../content/posts/*.mdx');
-const { slug } = Astro.params;
-
-// Flatten the slug parameter to a string.  For nested routes Astro provides an array.
-const slugString = Array.isArray(slug) ? slug.join('/') : slug;
-let PostEntry;
-for (const entry of allPosts) {
-  const normalized = entry.url.replace(/^\/posts\//, '').replace(/\/$/, '');
-  if (normalized === slugString) {
-    PostEntry = entry;
-    break;
-  }
+export async function getStaticPaths() {
+  const posts = await getCollection("posts");
+  return posts.map((post) => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
 }
 
-if (!PostEntry) {
-  throw new Error(`Post not found: ${slugString}`);
-}
-
-const { default: Content, frontmatter } = await PostEntry;
+const { post } = Astro.props;
 ---
 
-<BaseLayout title={frontmatter.title} description={frontmatter.description}>
-  <article class="prose dark:prose-invert max-w-none mt-8">
-    <h1>{frontmatter.title}</h1>
-    <p class="text-sm text-neutral-dark dark:text-neutral-light">
-      {new Date(frontmatter.pubDate).toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-      })}
-      {frontmatter.category && (
-        <>
-          {' · '}
-          <a href={`/category/${frontmatter.category.toLowerCase()}/`} class="hover:underline">
-            {frontmatter.category}
-          </a>
-        </>
-      )}
-    </p>
-    <Content />
-    {frontmatter.tags && frontmatter.tags.length > 0 && (
-      <footer class="mt-6 text-sm">
-        <strong>Tags:</strong>
-        {frontmatter.tags.map((tag: string) => (
-          <a href={`/tag/${tag.toLowerCase()}/`} class="ml-2 hover:underline">
-            {tag}
-          </a>
-        ))}
-      </footer>
-    )}
+<Layout title={post.data.title}>
+  <article class="prose mx-auto p-6">
+    <h1>{post.data.title}</h1>
+    <p>{post.data.description}</p>
+    <p><em>Published: {post.data.pubDate}</em></p>
+    <div>
+      <Content />
+    </div>
   </article>
-</BaseLayout>
+</Layout>
