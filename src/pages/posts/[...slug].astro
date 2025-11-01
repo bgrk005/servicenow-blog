@@ -1,0 +1,55 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const allPosts = await Astro.glob('../../content/posts/*.mdx');
+const { slug } = Astro.params;
+
+// Flatten the slug parameter to a string.  For nested routes Astro provides an array.
+const slugString = Array.isArray(slug) ? slug.join('/') : slug;
+let PostEntry;
+for (const entry of allPosts) {
+  const normalized = entry.url.replace(/^\/posts\//, '').replace(/\/$/, '');
+  if (normalized === slugString) {
+    PostEntry = entry;
+    break;
+  }
+}
+
+if (!PostEntry) {
+  throw new Error(`Post not found: ${slugString}`);
+}
+
+const { default: Content, frontmatter } = await PostEntry;
+---
+
+<BaseLayout title={frontmatter.title} description={frontmatter.description}>
+  <article class="prose dark:prose-invert max-w-none mt-8">
+    <h1>{frontmatter.title}</h1>
+    <p class="text-sm text-neutral-dark dark:text-neutral-light">
+      {new Date(frontmatter.pubDate).toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      })}
+      {frontmatter.category && (
+        <>
+          {' · '}
+          <a href={`/category/${frontmatter.category.toLowerCase()}/`} class="hover:underline">
+            {frontmatter.category}
+          </a>
+        </>
+      )}
+    </p>
+    <Content />
+    {frontmatter.tags && frontmatter.tags.length > 0 && (
+      <footer class="mt-6 text-sm">
+        <strong>Tags:</strong>
+        {frontmatter.tags.map((tag: string) => (
+          <a href={`/tag/${tag.toLowerCase()}/`} class="ml-2 hover:underline">
+            {tag}
+          </a>
+        ))}
+      </footer>
+    )}
+  </article>
+</BaseLayout>

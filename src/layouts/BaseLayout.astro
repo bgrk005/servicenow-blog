@@ -1,0 +1,40 @@
+---
+const { title, description } = Astro.props;
+const site = import.meta.env.SITE ?? '';
+---
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description ?? 'ServiceNow development blog'} />
+    <title>{title ? `${title} | ServiceNow Tech Blog` : 'ServiceNow Tech Blog'}</title>
+    <link rel="canonical" href={`${site}${Astro.url.pathname}`} />
+    <!-- Favicon can be replaced by placing a file in public/ -->
+  </head>
+  <body class="bg-neutral-light dark:bg-neutral-dark text-neutral-dark dark:text-neutral-light min-h-screen flex flex-col">
+    <header class="bg-white dark:bg-neutral-dark border-b border-neutral-light dark:border-neutral-dark">
+      <div class="container mx-auto flex items-center justify-between px-4 py-3">
+        <a href="/" class="text-2xl font-semibold text-primary dark:text-primary-dark">ServiceNow Tech Blog</a>
+        <nav class="space-x-4">
+          <a href="/" class="hover:underline">Home</a>
+          <a href="/about" class="hover:underline">About</a>
+        </nav>
+      </div>
+    </header>
+    <main class="flex-1 container mx-auto px-4">
+      <slot />
+    </main>
+    <footer class="border-t border-neutral-light dark:border-neutral-dark py-4 text-center text-sm">
+      <p>&copy; {new Date().getFullYear()} ServiceNow Tech Blog. Built with Astro.</p>
+    </footer>
+    <!-- Dark mode toggle script -->
+    <script>
+      // Persist dark mode preference using localStorage
+      const userPref = localStorage.getItem('theme');
+      if (userPref === 'dark') {
+        document.documentElement.classList.add('dark');
+      }
+    </script>
+  </body>
+</html>

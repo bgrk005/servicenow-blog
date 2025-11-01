@@ -1,0 +1,29 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostCard from '../../components/PostCard.astro';
+
+const allPosts = await Astro.glob('../../content/posts/*.mdx');
+const tagParam = Astro.params.tag.toLowerCase();
+const posts: any[] = [];
+for (const entry of allPosts) {
+  const { frontmatter } = await entry;
+  if (
+    !frontmatter.draft &&
+    Array.isArray(frontmatter.tags) &&
+    frontmatter.tags.map((t: string) => t.toLowerCase()).includes(tagParam)
+  ) {
+    posts.push({ ...entry, frontmatter });
+  }
+}
+posts.sort((a, b) => new Date(b.frontmatter.pubDate).valueOf() - new Date(a.frontmatter.pubDate).valueOf());
+---
+
+<BaseLayout title={`Tag: ${tagParam}`} description={`Posts tagged with ${tagParam}`}> 
+  <h1 class="text-3xl font-bold mt-8 mb-6">Posts tagged "{tagParam}"</h1>
+  <div class="grid gap-8 sm:grid-cols-2">
+    {posts.map((post) => (
+      <PostCard frontmatter={post.frontmatter} href={post.url} />
+    ))}
+    {posts.length === 0 && <p>No posts found.</p>}
+  </div>
+</BaseLayout>

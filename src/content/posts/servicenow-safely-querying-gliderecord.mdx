@@ -1,0 +1,50 @@
+---
+title: "ServiceNow: Safely querying GlideRecord (with examples)"
+description: "A practical guide to building safe, performant GlideRecord queries."
+pubDate: 2025-11-01
+category: "GlideRecord"
+tags: ["ServiceNow", "GlideRecord", "Performance", "Best Practices"]
+draft: false
+---
+
+When working with the ServiceNow platform, `GlideRecord` is your primary tool
+for interacting with the database.  Mis‑using it can lead to slow queries,
+unreadable code and even security issues.  This article demonstrates some
+techniques to write safe, performant queries.
+
+## Avoid using `addEncodedQuery` with raw input
+
+The `addEncodedQuery()` method lets you pass in an encoded query string.  It’s
+tempting to build these queries by concatenating strings, but this pattern
+makes it easy to accidentally introduce injection vulnerabilities.  A safer
+approach is to use the dedicated query methods:
+
+```javascript
+const gr = new GlideRecord('incident');
+gr.addQuery('active', true);
+gr.addQuery('priority', '<=', 3);
+gr.query();
+while (gr.next()) {
+  // process the record…
+}
+```
+
+## Use `setLimit()` to bound large result sets
+
+Always apply a sensible limit when you don’t need to process the entire table.
+
+```javascript
+gr.setLimit(100); // never process more than 100 records
+```
+
+## Index your tables
+
+If you consistently filter on certain fields, ensure those fields are indexed.
+You can create database indexes in the table’s dictionary entry.  Indexes are
+essential for high‑performance queries at scale.
+
+## Conclusion
+
+By breaking your queries into discrete `addQuery()` calls and avoiding
+string‑concatenated encoded queries you build safer, more maintainable
+applications on the ServiceNow platform.
