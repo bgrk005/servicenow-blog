@@ -1,29 +1,25 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import PostCard from '../../components/PostCard.astro';
+import Layout from "../../layouts/Layout.astro";
+import { getCollection } from "astro:content";
 
-const allPosts = await Astro.glob('../../content/posts/*.mdx');
-const categoryParam = Astro.params.category.toLowerCase();
-const posts: any[] = [];
-for (const entry of allPosts) {
-  const { frontmatter } = await entry;
-  if (
-    !frontmatter.draft &&
-    frontmatter.category &&
-    frontmatter.category.toLowerCase() === categoryParam
-  ) {
-    posts.push({ ...entry, frontmatter });
-  }
+export async function getStaticPaths() {
+  const posts = await getCollection("posts");
+  const categories = [...new Set(posts.map(p => p.data.category))];
+
+  return categories.map(category => ({
+    params: { category },
+    props: { category, posts: posts.filter(p => p.data.category === category) },
+  }));
 }
-posts.sort((a, b) => new Date(b.frontmatter.pubDate).valueOf() - new Date(a.frontmatter.pubDate).valueOf());
+
+const { category, posts } = Astro.props;
 ---
 
-<BaseLayout title={`Category: ${categoryParam}`} description={`Posts in category ${categoryParam}`}> 
-  <h1 class="text-3xl font-bold mt-8 mb-6">Posts in "{categoryParam}"</h1>
-  <div class="grid gap-8 sm:grid-cols-2">
-    {posts.map((post) => (
-      <PostCard frontmatter={post.frontmatter} href={post.url} />
+<Layout title={`Posts in ${category}`}>
+  <h1>Category: {category}</h1>
+  <ul>
+    {posts.map(p => (
+      <li><a href={`/posts/${p.slug}/`}>{p.data.title}</a></li>
     ))}
-    {posts.length === 0 && <p>No posts found.</p>}
-  </div>
-</BaseLayout>
+  </ul>
+</Layout>
