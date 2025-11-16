@@ -1,6 +1,7 @@
 ---
 import Layout from "../../layouts/BaseLayout.astro";
 import { getCollection } from "astro:content";
+import { withBase } from '../../utils/url';
 
 export async function getStaticPaths() {
   const posts = await getCollection("posts");

@@ -1,6 +1,7 @@
 ---
 import Layout from "../../layouts/BaseLayout.astro";
 import { getCollection } from "astro:content";
+import { withBase } from '../../utils/url';
 
 export async function getStaticPaths() {
   const posts = await getCollection("posts");
@@ -19,7 +20,7 @@ const { category, posts } = Astro.props;
   <h1>Category: {category}</h1>
   <ul>
     {posts.map(p => (
-      <li><a href={`/posts/${p.slug}/`}>{p.data.title}</a></li>
+      <li><a href={withBase(`/posts/${p.slug}/`)}>{p.data.title}</a></li>
     ))}
   </ul>
 </Layout>

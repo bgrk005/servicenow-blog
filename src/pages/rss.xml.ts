@@ -1,6 +1,7 @@
 import rss from "@astrojs/rss";
 import type { APIContext } from "astro";
 import { getCollection } from "astro:content";
+import { withBase } from '../utils/url';
 
 export async function GET(context: APIContext) {
   const posts = await getCollection("posts");
@@ -9,7 +10,7 @@ export async function GET(context: APIContext) {
     description: "Latest posts and insights on ServiceNow development.",
     site: context.site ?? "https://bgrk005.github.io/servicenow-blog/",
     items: posts.map((post) => ({
-      link: `/posts/${post.slug}/`,
+      link: withBase(`/posts/${post.slug}/`),
       title: post.data.title,
       description: post.data.description,
       pubDate: new Date(post.data.pubDate),
