@@ -1,6 +1,10 @@
 ---
+import { withBase } from '../utils/url';
+
 const { title, description } = Astro.props;
 const site = import.meta.env.SITE ?? '';
+const homeHref = withBase('/');
+const aboutHref = withBase('/about/');
 ---
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
@@ -15,10 +19,10 @@ const site = import.meta.env.SITE ?? '';
   <body class="bg-neutral-light dark:bg-neutral-dark text-neutral-dark dark:text-neutral-light min-h-screen flex flex-col">
     <header class="bg-white dark:bg-neutral-dark border-b border-neutral-light dark:border-neutral-dark">
       <div class="container mx-auto flex items-center justify-between px-4 py-3">
-        <a href="/" class="text-2xl font-semibold text-primary dark:text-primary-dark">ServiceNow Tech Blog</a>
+        <a href={homeHref} class="text-2xl font-semibold text-primary dark:text-primary-dark">ServiceNow Tech Blog</a>
         <nav class="space-x-4">
-          <a href="/" class="hover:underline">Home</a>
-          <a href="/about" class="hover:underline">About</a>
+          <a href={homeHref} class="hover:underline">Home</a>
+          <a href={aboutHref} class="hover:underline">About</a>
         </nav>
       </div>
     </header>

@@ -1,9 +1,12 @@
 ---
+import { withBase } from '../utils/url';
+
 interface Props {
   frontmatter: any;
   href: string;
 }
 const { frontmatter, href } = Astro.props as Props;
+const resolvedHref = withBase(href);
 const formattedDate = new Date(frontmatter.pubDate).toLocaleDateString('en-US', {
   year: 'numeric',
   month: 'long',
@@ -12,14 +15,14 @@ const formattedDate = new Date(frontmatter.pubDate).toLocaleDateString('en-US', 
 ---
 <article class="border border-neutral-light dark:border-neutral-dark p-4 rounded-lg hover:bg-neutral-light dark:hover:bg-neutral-dark transition-colors">
   <h2 class="text-xl font-semibold mb-1">
-    <a href={href} class="text-primary dark:text-primary-dark hover:underline">{frontmatter.title}</a>
+    <a href={resolvedHref} class="text-primary dark:text-primary-dark hover:underline">{frontmatter.title}</a>
   </h2>
   <p class="text-xs text-neutral-dark dark:text-neutral-light">
     {formattedDate}
     {frontmatter.category && (
       <>
         {' · '}
-        <a href={`/category/${frontmatter.category.toLowerCase()}/`} class="hover:underline">
+        <a href={withBase(`/category/${frontmatter.category.toLowerCase()}/`)} class="hover:underline">
           {frontmatter.category}
         </a>
       </>
@@ -29,7 +32,10 @@ const formattedDate = new Date(frontmatter.pubDate).toLocaleDateString('en-US', 
   {frontmatter.tags && frontmatter.tags.length > 0 && (
     <div class="mt-3 flex flex-wrap gap-2">
       {frontmatter.tags.map((tag: string) => (
-        <a href={`/tag/${tag.toLowerCase()}/`} class="text-xs bg-primary/20 text-primary dark:bg-primary-dark/20 dark:text-primary-dark py-1 px-2 rounded">
+        <a
+          href={withBase(`/tag/${tag.toLowerCase()}/`)}
+          class="text-xs bg-primary/20 text-primary dark:bg-primary-dark/20 dark:text-primary-dark py-1 px-2 rounded"
+        >
           {tag}
         </a>
       ))}

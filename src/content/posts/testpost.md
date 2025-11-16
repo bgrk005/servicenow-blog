@@ -1,8 +1,11 @@
 ---
-title: 'ServiceNow: Safely Querying GlideRecord (with Examples)'
-description: 'Learn how to safely query data using the GlideRecord API in ServiceNow.'
+title: "ServiceNow: Safely Querying GlideRecord (with Examples)"
+description: "Learn how to safely query data using the GlideRecord API in ServiceNow."
 pubDate: '2025-11-01'
-tags: ['servicenow', 'gliderecord', 'programming']
+tags:
+  - servicenow
+  - gliderecord
+  - programming
 ---
 
 # ServiceNow: Safely Querying GlideRecord (with Examples)
