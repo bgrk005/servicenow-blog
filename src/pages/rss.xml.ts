@@ -5,11 +5,10 @@ import { withBase } from '../utils/url';
 
 export async function GET(context: APIContext) {
   const posts = await getCollection("posts");
-  const site = context.site ?? 'https://bgrk005.github.io';
   const feed = await rss({
     title: "ServiceNow Tech Blog",
     description: "Latest posts and insights on ServiceNow development.",
-    site,
+    site: context.site ?? "https://bgrk005.github.io/servicenow-blog/",
     items: posts.map((post) => ({
       link: withBase(`/posts/${post.slug}/`),
       title: post.data.title,

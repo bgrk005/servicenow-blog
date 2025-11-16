@@ -32,10 +32,7 @@ const formattedDate = new Date(post.data.pubDate).toLocaleDateString('en-US', {
       {Array.isArray(post.data.tags) && post.data.tags.length > 0 && (
         <div class="mt-4 flex flex-wrap gap-2">
           {post.data.tags.map((tag) => (
-            <a
-              href={withBase(`/tag/${tag.toLowerCase()}/`)}
-              class="text-xs bg-primary/20 text-primary dark:bg-primary-dark/20 dark:text-primary-dark py-1 px-2 rounded-full"
-            >
+            <a href={`/tag/${tag.toLowerCase()}/`} class="text-xs bg-primary/20 text-primary dark:bg-primary-dark/20 dark:text-primary-dark py-1 px-2 rounded-full">
               {tag}
             </a>
           ))}

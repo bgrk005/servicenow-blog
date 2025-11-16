@@ -77,16 +77,16 @@ included to deploy your site to **GitHub Pages** automatically.
 
 4. **Configure your site URL**
 
-   Open `astro.config.mjs` and set the `site` property to the **root domain**
-   where your blog will be hosted (for GitHub Pages this is typically
-   `https://<your‑username>.github.io`).  When deploying to a project page
-   (anything that is not your root `username.github.io` repo) you must also set
-   the `base` option to `/<your‑repo>`.  This ensures CSS, images and links load
-   correctly when GitHub Pages serves the site from a sub-path.
+   Open `astro.config.mjs` and set the `site` property to the URL where your blog
+   will be hosted (for GitHub Pages this is typically
+   `https://<your‑username>.github.io/<your‑repo>`).  When deploying to a
+   project page (anything that is not your root `username.github.io` repo) you
+   must also set the `base` option to `/<your‑repo>`.  This ensures CSS, images
+   and links load correctly when GitHub Pages serves the site from a sub-path.
 
    ```js
    export default defineConfig({
-     site: 'https://bgrk005.github.io',
+     site: 'https://bgrk005.github.io/servicenow-blog/',
      base: '/servicenow-blog',
      // ...
    });
@@ -131,15 +131,35 @@ included to deploy your site to **GitHub Pages** automatically.
   re-run the latest workflow from the **Actions** tab (or push a new commit).
 
 - **Site shows 404 even though the workflow succeeded** – Confirm the `site`
-  option in `astro.config.mjs` points to the root domain (for example,
-  `https://<username>.github.io`) and the `base` option is set to your
-  repository name (for example, `/servicenow-blog`).  Astro combines these
-  values so canonical URLs and internal links all point at the correct Pages
-  sub-path.
+  and `base` options in `astro.config.mjs` exactly match your Pages URL.  For a
+  project site named `servicenow-blog`, the values should be:
+
+  ```js
+  site: 'https://<username>.github.io/servicenow-blog/',
+  base: '/servicenow-blog',
+  ```
 
 - **Latest code is not on GitHub** – Run `git status` locally to verify
   everything is committed, `git remote -v` to ensure `origin` points to the
   correct GitHub URL, and then `git push origin main` to upload your branch.
+
+6. **Push your local changes to GitHub**
+
+   If you do not see the latest files in your GitHub repository, verify that the
+   `origin` remote is configured and push your commits:
+
+   ```bash
+   git remote -v                 # confirm the GitHub URL is listed
+   git remote add origin https://github.com/<username>/<repo>.git   # add if missing
+   git push -u origin main       # push the current branch
+   ```
+
+   Replace `<username>`/`<repo>` with your GitHub account (for example,
+   `bgrk005/servicenow-blog`).  After the push completes, refresh your GitHub
+   repository – the files should now appear and the **Deploy to GitHub Pages**
+   workflow will run automatically.  Visit the **Actions** tab to watch the
+   build, and once it succeeds you can load
+   `https://<username>.github.io/<repo>/` to view the live site.
 
 ### Writing posts
 
