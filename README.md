@@ -44,6 +44,12 @@ included to deploy your site to **GitHub Pages** automatically.
    git push -u origin main
    ```
 
+   If you ever need to confirm that your local repository is pointing at the
+   correct GitHub remote, run `git remote -v`.  The command prints the URLs for
+   each remote (for example, `origin https://github.com/you/servicenow-blog.git`).
+   If nothing is shown, add the remote again with the `git remote add origin …`
+   command from above.
+
 3. **Install dependencies and run locally**
 
    Make sure you have [Node.js](https://nodejs.org) ≥16 installed.  Install the
@@ -57,12 +63,34 @@ included to deploy your site to **GitHub Pages** automatically.
    By default the site runs at `http://localhost:4321`.  As you edit files in
    the `src/` directory the page reloads automatically.
 
+   When you are ready to publish updates back to GitHub, commit your changes
+   locally and push them to `main`:
+
+   ```bash
+   git add .
+   git commit -m "Describe your change"
+   git push origin main
+   ```
+
+   If you are working on a feature branch, replace `main` with that branch
+   name when pushing.
+
 4. **Configure your site URL**
 
    Open `astro.config.mjs` and set the `site` property to the URL where your blog
    will be hosted (for GitHub Pages this is typically
-   `https://<your‑username>.github.io/<your‑repo>`).  This value is used in
-   your RSS feed, sitemap and canonical links.
+   `https://<your‑username>.github.io/<your‑repo>`).  When deploying to a
+   project page (anything that is not your root `username.github.io` repo) you
+   must also set the `base` option to `/<your‑repo>`.  This ensures CSS, images
+   and links load correctly when GitHub Pages serves the site from a sub-path.
+
+   ```js
+   export default defineConfig({
+     site: 'https://bgrk005.github.io/servicenow-blog/',
+     base: '/servicenow-blog',
+     // ...
+   });
+   ```
 
 5. **Enable GitHub Pages**
 
@@ -73,6 +101,24 @@ included to deploy your site to **GitHub Pages** automatically.
    2. In **Source**, choose **GitHub Actions**.
    3. Save.  After your first push, the workflow will run and deploy your
       blog to `<your‑username>.github.io/<your‑repo>`.
+
+6. **Push your local changes to GitHub**
+
+   If you do not see the latest files in your GitHub repository, verify that the
+   `origin` remote is configured and push your commits:
+
+   ```bash
+   git remote -v                 # confirm the GitHub URL is listed
+   git remote add origin https://github.com/<username>/<repo>.git   # add if missing
+   git push -u origin main       # push the current branch
+   ```
+
+   Replace `<username>`/`<repo>` with your GitHub account (for example,
+   `bgrk005/servicenow-blog`).  After the push completes, refresh your GitHub
+   repository – the files should now appear and the **Deploy to GitHub Pages**
+   workflow will run automatically.  Visit the **Actions** tab to watch the
+   build, and once it succeeds you can load
+   `https://<username>.github.io/<repo>/` to view the live site.
 
 ### Writing posts
 
