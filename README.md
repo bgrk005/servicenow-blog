@@ -143,6 +143,24 @@ included to deploy your site to **GitHub Pages** automatically.
   everything is committed, `git remote -v` to ensure `origin` points to the
   correct GitHub URL, and then `git push origin main` to upload your branch.
 
+6. **Push your local changes to GitHub**
+
+   If you do not see the latest files in your GitHub repository, verify that the
+   `origin` remote is configured and push your commits:
+
+   ```bash
+   git remote -v                 # confirm the GitHub URL is listed
+   git remote add origin https://github.com/<username>/<repo>.git   # add if missing
+   git push -u origin main       # push the current branch
+   ```
+
+   Replace `<username>`/`<repo>` with your GitHub account (for example,
+   `bgrk005/servicenow-blog`).  After the push completes, refresh your GitHub
+   repository – the files should now appear and the **Deploy to GitHub Pages**
+   workflow will run automatically.  Visit the **Actions** tab to watch the
+   build, and once it succeeds you can load
+   `https://<username>.github.io/<repo>/` to view the live site.
+
 ### Writing posts
 
 Place your posts in `src/content/posts/` as `.md` or `.mdx` files.  Each file
